@@ -1,6 +1,0 @@
-net/consensys/tools/ethereum/TypedDataSignature/Sign.class
-net/consensys/tools/ethereum/TypedDataSignature/Sign$SignatureData.class
-net/consensys/tools/ethereum/TypedDataSignature/CryptoUtils.class
-net/consensys/tools/ethereum/TypedDataSignature/SolidityPackEncoder.class
-net/consensys/tools/ethereum/TypedDataSignature/TypedData.class
-net/consensys/tools/ethereum/TypedDataSignature/TypedDataSignature.class
