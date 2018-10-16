@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { Form, Button, FormGroup, FormControl, ControlLabel, Col, Alert } from 'react-bootstrap';
+import { Form, Button, FormGroup, FormControl, ControlLabel, Col } from 'react-bootstrap';
+import { RadioGroup, RadioButton } from 'react-radio-buttons';
+import EthSignTypedDataV1 from './components/EthSignTypedDataV1.js'
+import EthSignTypedDataV3 from './components/EthSignTypedDataV3.js'
 
 class App extends Component {
 
@@ -11,8 +14,11 @@ class App extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.sign = this.sign.bind(this);
+    this.onChange = this.onChange.bind(this);
+  }
 
+  onChange(val) {
+    this.setState({"version": val})
   }
 
   handleChange(event) {
@@ -28,43 +34,17 @@ class App extends Component {
     }
   }
 
-  async sign(data) {
-      console.log("sign(data: "+JSON.stringify(data)+") with account " + window.web3.eth.accounts[0])
-
-      return new Promise((resolve, reject) => {
-        window.web3.currentProvider.sendAsync(
-        {
-            method  : 'eth_signTypedData',
-            params  : [data, window.web3.eth.accounts[0]],
-            from: window.web3.eth.accounts[0]
-        },  (err, { result }) => (err ? reject(err) : resolve(result))
-        )
-      });
-
-  }
-
   async handleSubmit() {
-    console.log("handleSubmit()")
-    this.setState({error1: null})
-    this.setState({success1: null})
+    var signature;
 
-    const typedData = [
-      {
-        'type': 'string',
-        'name': 'field1',
-        'value': "val1"
-      },
-      {
-        'type': 'string',
-        'name': 'field2',
-        'value': "val2"
-      }
-    ];
-
-      var signature = await this.sign(typedData);
-      console.log("signature="+signature)
-      this.setState({signature: signature})
-
+    if(this.state.version === "v1") {
+      signature = await new EthSignTypedDataV1().sign(this.state.field1, this.state.field2);
+    
+    } else if(this.state.version === "v3") {
+      signature = await new EthSignTypedDataV3().sign(this.state.field1, this.state.field2);
+    
+    }
+    this.setState({signature: signature})
   }
 
 
@@ -80,24 +60,14 @@ class App extends Component {
 
          <Form horizontal  className="Section">
 
-              { this.state.error1 ? 
-                <div>
-                  <Col sm={2}></Col>
-                  <Col sm={10}>
-                    <Alert bsStyle="danger">{this.state.error1}</Alert> 
-                  </Col> 
-                </div>
-               : null }
-
-              { this.state.success1 ? 
-                <div>
-                  <Col sm={2}></Col>
-                  <Col sm={10}>
-                    <Alert bsStyle="success">{this.state.success1}</Alert> 
-                  </Col> 
-                </div>
-               : null }
-              
+            <RadioGroup onChange={ this.onChange } horizontal>
+              <RadioButton value="v1">
+                V1
+              </RadioButton>
+              <RadioButton value="v3">
+                V3
+              </RadioButton>
+            </RadioGroup>
 
             <FormGroup controlId="formField1">
               <Col componentClass={ControlLabel} sm={2}>Field1</Col>

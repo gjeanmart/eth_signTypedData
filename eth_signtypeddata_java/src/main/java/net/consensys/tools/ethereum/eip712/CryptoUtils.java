@@ -1,4 +1,4 @@
-package net.consensys.tools.ethereum.TypedDataSignature;
+package net.consensys.tools.ethereum.eip712;
 
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -10,19 +10,22 @@ import javax.xml.bind.DatatypeConverter;
 import org.web3j.crypto.ECDSASignature;
 import org.web3j.crypto.Hash;
 import org.web3j.crypto.Keys;
+import org.web3j.crypto.Sign;
 import org.web3j.crypto.Sign.SignatureData;
 import org.web3j.utils.Numeric;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public abstract class CryptoUtils {
+public class CryptoUtils {
+    private static final String PERSONAL_MESSAGE_PREFIX = "\u0019Ethereum Signed Message:\n";
     
-    private final static String PERSONAL_MESSAGE_PREFIX = "\u0019Ethereum Signed Message:\n";
+    private CryptoUtils() {}
+    
 
     public static Map<Integer, String> ecrecoverPersonalSignature(String signature, String message) {
         
-        log.debug("checkSig(signature="+signature+", message="+message+")");
+        log.debug("ecrecoverPersonalSignature(signature="+signature+", message="+message+")");
     
          // Message
          String pref = PERSONAL_MESSAGE_PREFIX + message.length();
@@ -35,7 +38,7 @@ public abstract class CryptoUtils {
 
     public static Map<Integer, String> ecrecover(String signature, byte[] msgHash) {
         
-        log.debug("checkSig(signature="+signature+", msgHash="+DatatypeConverter.printHexBinary(msgHash)+")");
+        log.debug("ecrecover(signature="+signature+", msgHash="+DatatypeConverter.printHexBinary(msgHash)+")");
     
          // Signature
          byte[] array = Numeric.hexStringToByteArray(signature);

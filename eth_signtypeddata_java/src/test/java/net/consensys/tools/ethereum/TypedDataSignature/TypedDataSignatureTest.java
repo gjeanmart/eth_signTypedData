@@ -10,6 +10,8 @@ import org.junit.Test;
 import org.web3j.abi.datatypes.Utf8String;
 
 import lombok.extern.slf4j.Slf4j;
+import net.consensys.tools.ethereum.eip712.TypedData;
+import net.consensys.tools.ethereum.eip712.TypedDataSignature;
 
 @Slf4j
 public class TypedDataSignatureTest {

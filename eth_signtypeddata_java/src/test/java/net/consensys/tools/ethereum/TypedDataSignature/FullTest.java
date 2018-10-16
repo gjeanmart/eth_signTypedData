@@ -9,9 +9,11 @@ import javax.xml.bind.DatatypeConverter;
 
 import org.hamcrest.collection.IsMapContaining;
 import org.junit.Test;
-import org.web3j.crypto.WalletFile.Crypto;
 
 import lombok.extern.slf4j.Slf4j;
+import net.consensys.tools.ethereum.eip712.CryptoUtils;
+import net.consensys.tools.ethereum.eip712.TypedData;
+import net.consensys.tools.ethereum.eip712.TypedDataSignature;
 
 @Slf4j
 public class FullTest {

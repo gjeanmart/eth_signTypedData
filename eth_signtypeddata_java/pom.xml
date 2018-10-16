@@ -11,7 +11,7 @@
 	<properties>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<maven.compiler.source>1.8</maven.compiler.source>
-		<web3j.version>3.3.1</web3j.version>
+		<web3j.version>3.6.0</web3j.version>
 		<lombok.version>1.16.20</lombok.version>
 	</properties>
 
