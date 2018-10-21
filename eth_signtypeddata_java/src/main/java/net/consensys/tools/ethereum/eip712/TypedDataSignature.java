@@ -4,12 +4,16 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.web3j.abi.datatypes.Bool;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Bytes32;
+import org.web3j.crypto.Sign;
+import org.web3j.crypto.Sign.SignatureData;
+import org.web3j.utils.Numeric;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -63,4 +67,32 @@ public class TypedDataSignature {
         }).collect(Collectors.toList());
     }
 
+    public static String zeroPadded(byte[] bs, int padding) {
+        String s = Numeric.toHexStringNoPrefix(bs);
+        BigInteger bi = Numeric.toBigInt(s);
+        return Numeric.toHexStringNoPrefixZeroPadded(bi, padding);
+    }
+
+    public static String zeroPadded(byte[] bs) {
+        return zeroPadded(bs, 64);
+    }
+
+    public static String concatSig(SignatureData sig) {
+        List<String> signatureElements = Stream.of(sig.getR(), sig.getS()).
+                                                map(TypedDataSignature::zeroPadded).
+                                                collect(Collectors.toList());
+
+        String r = signatureElements.get(0);
+        String s = signatureElements.get(1);
+        byte[] v = new byte[] { sig.getV() };
+        return Numeric.prependHexPrefix(r + s + Numeric.toHexStringNoPrefix(v));
+    }
+
+    public static String signTypedData(org.web3j.crypto.Credentials credentials, List<TypedData> typedData) {
+
+        byte[] messageHash = TypedDataSignature.generateSignatureHash(typedData);
+
+        SignatureData signedMessage = Sign.signMessage(messageHash, credentials.getEcKeyPair(), false);
+        return concatSig(signedMessage);
+    }
 }
