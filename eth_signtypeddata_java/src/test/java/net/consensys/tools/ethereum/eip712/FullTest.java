@@ -1,4 +1,4 @@
-package net.consensys.tools.ethereum.TypedDataSignature;
+package net.consensys.tools.ethereum.eip712;
 
 import static org.junit.Assert.assertThat;
 
