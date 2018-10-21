@@ -1,17 +1,18 @@
-package net.consensys.tools.ethereum.TypedDataSignature;
+package net.consensys.tools.ethereum.eip712;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 
 import javax.xml.bind.DatatypeConverter;
 
 import org.junit.Test;
-import org.web3j.abi.datatypes.Utf8String;
 
 import lombok.extern.slf4j.Slf4j;
-import net.consensys.tools.ethereum.eip712.TypedData;
-import net.consensys.tools.ethereum.eip712.TypedDataSignature;
+import org.web3j.crypto.Credentials;
+import org.web3j.crypto.WalletUtils;
 
 @Slf4j
 public class TypedDataSignatureTest {
